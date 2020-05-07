@@ -1,5 +1,5 @@
 CREATE TABLE HOSPITAL_NEEDS(
-id integer PRIMARY KEY,
+id serial PRIMARY KEY,
 hospital_id integer NOT NULL,
 product_id integer NOT NULL,
 quantity integer NOT NULL,
