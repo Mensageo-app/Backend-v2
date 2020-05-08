@@ -1,5 +1,5 @@
 CREATE TABLE HOSPITAL(
-    id integer PRIMARY KEY,
+    id serial PRIMARY KEY,
     name varchar(255) UNIQUE NOT NULL,
     address varchar(255),
     email varchar(255),

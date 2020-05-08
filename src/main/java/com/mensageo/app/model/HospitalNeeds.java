@@ -16,12 +16,11 @@ public class HospitalNeeds {
     @Column(nullable = false)
     private long quantity;
 
-    @Column(nullable = false)
+    @Column(nullable = false, insertable = false, updatable = true)
     @Temporal(TemporalType.TIMESTAMP)
     private Date requestTimestamp;
 
     private long hospitalId;
-
 
     public long getHospitalId() {
         return hospitalId;
@@ -30,7 +29,6 @@ public class HospitalNeeds {
     public void setHospitalId(long hospitalId) {
         this.hospitalId = hospitalId;
     }
-
 
     public long getId() {
         return id;
