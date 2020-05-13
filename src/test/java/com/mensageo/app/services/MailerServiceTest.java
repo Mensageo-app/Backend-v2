@@ -13,8 +13,7 @@ import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.beans.HasPropertyWithValue.hasProperty;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class MailerServiceTest {
@@ -54,8 +53,12 @@ public class MailerServiceTest {
         EmailContent emailContent = new EmailContent();
         emailContent.setBody("Email body");
         emailContent.setSubject("Email subject");
-        emailContent.setMakerId(1L);
-        emailContent.setHospitalNeedsId(5L);
+        emailContent.setProductId(5L);
+        emailContent.setName("Name description");
+        emailContent.setCompany("Company description");
+        emailContent.setPhoneNumber("+5555-5555");
+        emailContent.setDescription("Offer description");
+        emailContent.setQuantity(100L);
 
         // When
         mailerService.sendEmail(emailContent);
@@ -63,10 +66,14 @@ public class MailerServiceTest {
         // Then
         verify(emailRepository).save(MockitoHamcrest.argThat(
                 allOf(
-                        hasProperty("makerId", equalTo(1L)),
-                        hasProperty("hospitalNeedsId", equalTo(5L)),
+                        hasProperty("productId", equalTo(5L)),
                         hasProperty("subject", equalTo("Email subject")),
-                        hasProperty("body", equalTo("Email body"))
+                        hasProperty("body", equalTo("Email body")),
+                        hasProperty("name", equalTo("Name description")),
+                        hasProperty("company", equalTo("Company description")),
+                        hasProperty("phoneNumber", equalTo("+5555-5555")),
+                        hasProperty("description", equalTo("Offer description")),
+                        hasProperty("quantity", equalTo(100L))
                 )
         ));
     }
@@ -75,14 +82,30 @@ public class MailerServiceTest {
     public void shouldLogErrorIfSavingOnDatabaseFails(){
         // Given
         EmailContent emailContent = new EmailContent();
-        emailContent.setMakerId(1L);
-        emailContent.setHospitalNeedsId(5L);
 
         when(emailRepository.save(any())).thenThrow(RuntimeException.class);
 
         // When
         mailerService.sendEmail(emailContent);
 
+        // Then
+        verify(log).error(any(String.class), any(RuntimeException.class));
+    }
+
+
+    @Test
+    public void shouldLogErrorIfSendingEmailFails(){
+        // Given
+        EmailContent emailContent = new EmailContent();
+
+        doThrow(RuntimeException.class)
+                .when(mailerClient)
+                .sendEmail(any(EmailContent.class));
+
+        // When
+        mailerService.sendEmail(emailContent);
+
+        // Then
         verify(log).error(any(String.class), any(RuntimeException.class));
     }
 

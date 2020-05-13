@@ -10,11 +10,39 @@ public class Email {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
+    private long productId;
+    private long quantity;
 
     private String subject;
     private String body;
-    private long hospitalNeedsId;
-    private long makerId;
+    private String name;
+    private String company;
+    private String phoneNumber;
+    private String description;
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public long getProductId() {
+        return productId;
+    }
+
+    public void setProductId(long productId) {
+        this.productId = productId;
+    }
+
+    public long getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(long quantity) {
+        this.quantity = quantity;
+    }
 
     public String getSubject() {
         return subject;
@@ -32,20 +60,35 @@ public class Email {
         this.body = body;
     }
 
-    public long getHospitalNeedsId() {
-        return hospitalNeedsId;
+    public String getName() {
+        return name;
     }
 
-    public void setHospitalNeedsId(long hospitalNeedsId) {
-        this.hospitalNeedsId = hospitalNeedsId;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public long getMakerId() {
-        return makerId;
+    public String getCompany() {
+        return company;
     }
 
-    public void setMakerId(long makerId) {
-        this.makerId = makerId;
+    public void setCompany(String company) {
+        this.company = company;
     }
 
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
 }

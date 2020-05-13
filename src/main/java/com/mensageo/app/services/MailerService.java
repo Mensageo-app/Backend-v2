@@ -19,15 +19,17 @@ public class MailerService {
     }
 
     public void sendEmail(EmailContent emailContent) {
-
         try {
             mailerClient.sendEmail(emailContent);
-
             Email email = new Email();
-            email.setMakerId(emailContent.getMakerId());
-            email.setHospitalNeedsId(emailContent.getHospitalNeedsId());
+            email.setProductId(emailContent.getProductId());
             email.setSubject(emailContent.getSubject());
             email.setBody(emailContent.getBody());
+            email.setName(emailContent.getName());
+            email.setCompany(emailContent.getCompany());
+            email.setPhoneNumber(emailContent.getPhoneNumber());
+            email.setDescription(emailContent.getDescription());
+            email.setQuantity(emailContent.getQuantity());
             emailRepository.save(email);
         } catch (Exception ex) {
             log.error("Error when saving email on database.", ex);
