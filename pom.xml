@@ -16,7 +16,6 @@
 
 	<properties>
 		<java.version>1.8</java.version>
-		<openjpa.log>DefaultLevel=WARN,Runtime=INFO,Tool=INFO,SQL=TRACE</openjpa.log>
 		<hibernate.show_sql>true</hibernate.show_sql>
 	</properties>
 
@@ -56,11 +55,6 @@
 		<dependency>
 			<groupId>org.flywaydb</groupId>
 			<artifactId>flyway-core</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>log4j</groupId>
-			<artifactId>log4j</artifactId>
-			<version>1.2.17</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

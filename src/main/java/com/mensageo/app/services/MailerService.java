@@ -2,7 +2,7 @@ package com.mensageo.app.services;
 
 import com.mensageo.app.model.Email;
 import com.mensageo.app.repository.EmailRepository;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
 import org.springframework.stereotype.Component;
 
 @Component

@@ -1,14 +1,13 @@
 package com.mensageo.app.services;
 
 import com.mensageo.app.repository.EmailRepository;
-import groovy.util.logging.Log4j;
-import org.apache.log4j.Logger;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.hamcrest.MockitoHamcrest;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.slf4j.Logger;
 
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.equalTo;
