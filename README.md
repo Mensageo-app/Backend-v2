@@ -30,3 +30,6 @@ For the H2 DB for the tests we don't have the flyway enabled -  we use the JPA t
      -  Also this one for how to execute Flyway DB migrations on app startup - https://docs.spring.io/spring-boot/docs/1.1.1.RELEASE/reference/html/howto-database-initialization.html
      
      
+## Swagger 2
+
+Swagger is enabled and available in the url http://localhost:8081/swagger-ui.html
