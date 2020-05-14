@@ -20,7 +20,6 @@ public class MailerService {
 
     public void sendEmail(EmailContent emailContent) {
         try {
-            mailerClient.sendEmail(emailContent);
             Email email = new Email();
             email.setProductId(emailContent.getProductId());
             email.setSubject(emailContent.getSubject());
@@ -31,6 +30,7 @@ public class MailerService {
             email.setDescription(emailContent.getDescription());
             email.setQuantity(emailContent.getQuantity());
             emailRepository.save(email);
+            mailerClient.sendEmail(emailContent);
         } catch (Exception ex) {
             log.error("Error when saving email on database.", ex);
         }

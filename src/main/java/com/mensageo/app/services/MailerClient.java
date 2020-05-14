@@ -1,10 +1,8 @@
 package com.mensageo.app.services;
 
-import org.springframework.stereotype.Component;
+import javax.mail.MessagingException;
+import java.io.IOException;
 
-@Component
-public class MailerClient {
-    public void sendEmail(EmailContent emailContent) {
-
-    }
+public interface MailerClient {
+    void sendEmail(EmailContent emailContent) throws MessagingException, IOException;
 }

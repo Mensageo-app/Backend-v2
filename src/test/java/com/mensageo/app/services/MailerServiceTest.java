@@ -9,6 +9,9 @@ import org.mockito.hamcrest.MockitoHamcrest;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.slf4j.Logger;
 
+import javax.mail.MessagingException;
+import java.io.IOException;
+
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.beans.HasPropertyWithValue.hasProperty;
@@ -35,7 +38,7 @@ public class MailerServiceTest {
     }
 
     @Test
-    public void shouldSendAnEmailAndSaveItOnDatabaseWhenEmailContentIsValid() {
+    public void shouldSendAnEmailAndSaveItOnDatabaseWhenEmailContentIsValid() throws IOException, MessagingException {
         // Given
         EmailContent emailContent = new EmailContent();
 
@@ -94,7 +97,7 @@ public class MailerServiceTest {
 
 
     @Test
-    public void shouldLogErrorIfSendingEmailFails(){
+    public void shouldLogErrorIfSendingEmailFails() throws IOException, MessagingException {
         // Given
         EmailContent emailContent = new EmailContent();
 
