@@ -19,7 +19,7 @@ import static org.mockito.Mockito.*;
 public class MailerServiceTest {
 
     @Mock
-    MailerClient mailerClient;
+    GmailClient gmailClient;
 
     @Mock
     EmailRepository emailRepository;
@@ -31,7 +31,7 @@ public class MailerServiceTest {
 
     @Before
     public void setUp() {
-        mailerService = new MailerService(mailerClient, emailRepository, log);
+        mailerService = new MailerService(gmailClient, emailRepository, log);
     }
 
     @Test
@@ -43,7 +43,7 @@ public class MailerServiceTest {
         mailerService.sendEmail(emailContent);
 
         // Then
-        verify(mailerClient).sendEmail(emailContent);
+        verify(gmailClient).sendEmail(emailContent);
         verify(emailRepository).save(any());
     }
 
@@ -99,7 +99,7 @@ public class MailerServiceTest {
         EmailContent emailContent = new EmailContent();
 
         doThrow(RuntimeException.class)
-                .when(mailerClient)
+                .when(gmailClient)
                 .sendEmail(any(EmailContent.class));
 
         // When
