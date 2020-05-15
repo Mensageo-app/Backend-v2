@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 
 import javax.mail.MessagingException;
 import java.io.IOException;
+import java.security.GeneralSecurityException;
 
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.equalTo;
@@ -38,7 +39,7 @@ public class MailerServiceTest {
     }
 
     @Test
-    public void shouldSendAnEmailAndSaveItOnDatabaseWhenEmailContentIsValid() throws IOException, MessagingException {
+    public void shouldSendAnEmailAndSaveItOnDatabaseWhenEmailContentIsValid() throws IOException, MessagingException, GeneralSecurityException {
         // Given
         EmailContent emailContent = new EmailContent();
 
@@ -97,7 +98,7 @@ public class MailerServiceTest {
 
 
     @Test
-    public void shouldLogErrorIfSendingEmailFails() throws IOException, MessagingException {
+    public void shouldLogErrorIfSendingEmailFails() throws IOException, MessagingException, GeneralSecurityException {
         // Given
         EmailContent emailContent = new EmailContent();
 

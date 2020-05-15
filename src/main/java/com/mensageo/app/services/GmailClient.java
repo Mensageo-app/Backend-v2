@@ -31,40 +31,38 @@ import java.util.Properties;
 @Component
 public class GmailClient implements MailerClient {
 
-    private static final String GOOGLE_CREDENTIALS = "{\"installed\":{\"client_id\":\"620463289720-o3c85foop4ia02rqqakp8dfq9fhmq5hd.apps.googleusercontent.com\",\"project_id\":\"quickstart-1589462243427\",\"auth_uri\":\"https://accounts.google.com/o/oauth2/auth\",\"token_uri\":\"https://oauth2.googleapis.com/token\",\"auth_provider_x509_cert_url\":\"https://www.googleapis.com/oauth2/v1/certs\",\"client_secret\":\"shPnBha8eKMoUkCade83g1wA\",\"redirect_uris\":[\"urn:ietf:wg:oauth:2.0:oob\",\"http://localhost\"]}}";
+    private static final String CREDENTIALS_FILE_PATH = "/credentials.json";
     private Gmail gmailService;
     private static final JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
     private static final String APPLICATION_NAME = "Mensageo Gmail API";
-    private static final List<String> SCOPES = Collections.singletonList(GmailScopes.GMAIL_LABELS);
+    private static final List<String> SCOPES = Collections.singletonList(GmailScopes.GMAIL_SEND);
     private static final String TOKENS_DIRECTORY_PATH = "tokens";
 
-    public GmailClient() throws GeneralSecurityException, IOException {
-        final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
-        gmailService = new Gmail.Builder(HTTP_TRANSPORT, JSON_FACTORY, getCredentials(HTTP_TRANSPORT))
-                .setApplicationName(APPLICATION_NAME)
-                .build();
-
-    }
-
     @Override
-    public void sendEmail(EmailContent emailContent) throws MessagingException, IOException {
+    public void sendEmail(EmailContent emailContent) throws MessagingException, IOException, GeneralSecurityException {
+        if (gmailService == null) authenticate();
         sendMessage("mensageo.backend@gmail.com", createEmail(
-                "harcoded-shit@email.com",
-                emailContent.getCompany(),
+                "mtobalo@thoughtworks.com",
+                "no-reply@gmail.com",
                 emailContent.getSubject(),
                 emailContent.getBody()
         ));
     }
 
+    private void authenticate() throws GeneralSecurityException, IOException {
+        final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
+        gmailService = new Gmail.Builder(HTTP_TRANSPORT, JSON_FACTORY, getCredentials(HTTP_TRANSPORT))
+                .setApplicationName(APPLICATION_NAME)
+                .build();
+    }
+
     private static Credential getCredentials(final NetHttpTransport HTTP_TRANSPORT) throws IOException {
         // Load client secrets.
-        InputStream is = new ByteArrayInputStream(GOOGLE_CREDENTIALS.getBytes(Charset.defaultCharset()));
-
-//        if (intStream == null) {
-//            throw new FileNotFoundException("Resource not found: " + CREDENTIALS_FILE_PATH);
-//        }
-
-        GoogleClientSecrets clientSecrets = GoogleClientSecrets.load(JSON_FACTORY, new InputStreamReader(is));
+        InputStream in = GmailClient.class.getResourceAsStream(CREDENTIALS_FILE_PATH);
+        if (in == null) {
+            throw new FileNotFoundException("Resource not found: " + CREDENTIALS_FILE_PATH);
+        }
+        GoogleClientSecrets clientSecrets = GoogleClientSecrets.load(JSON_FACTORY, new InputStreamReader(in));
 
         // Build flow and trigger user authorization request.
         GoogleAuthorizationCodeFlow flow = new GoogleAuthorizationCodeFlow.Builder(
