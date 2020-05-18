@@ -42,7 +42,7 @@ public class GmailClient implements MailerClient {
     public void sendEmail(EmailContent emailContent) throws MessagingException, IOException, GeneralSecurityException {
         if (gmailService == null) authenticate();
         sendMessage("mensageo.backend@gmail.com", createEmail(
-                "mtobalo@thoughtworks.com",
+                "mensageo.backend@gmail.com",
                 "no-reply@gmail.com",
                 emailContent.getSubject(),
                 emailContent.getBody()
