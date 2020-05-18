@@ -8,7 +8,7 @@ import javax.persistence.Id;
 @Entity
 public class Email {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private long productId;
     private long quantity;

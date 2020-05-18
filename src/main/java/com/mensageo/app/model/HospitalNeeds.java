@@ -7,7 +7,7 @@ import java.util.Date;
 public class HospitalNeeds {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @Column(nullable = false)
