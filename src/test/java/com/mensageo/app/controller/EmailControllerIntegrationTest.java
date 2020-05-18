@@ -1,34 +1,37 @@
 package com.mensageo.app.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mensageo.app.model.Email;
-import com.mensageo.app.model.Hospital;
-import com.mensageo.app.model.Product;
 import com.mensageo.app.repository.EmailRepository;
-import com.mensageo.app.repository.ProductRepository;
 import com.mensageo.app.services.EmailContent;
+import com.mensageo.app.services.MailerClient;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.hamcrest.MockitoHamcrest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.beans.HasPropertyWithValue.hasProperty;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-@TestPropertySource(locations = "classpath:application-integrationtest.properties")
 @AutoConfigureMockMvc
+@Sql("/delete_emails_and_load_one_product.sql")
 public class EmailControllerIntegrationTest {
     static String API_ROOT = "/api/emails";
 
@@ -40,15 +43,12 @@ public class EmailControllerIntegrationTest {
     @Autowired
     private EmailRepository emailRepository;
 
-    @Autowired
-    private ProductRepository productRepository;
+    @MockBean
+    private MailerClient mockMailerClient;
 
     @Before
     public void initTest() {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
-        productRepository.deleteAll();
-        emailRepository.deleteAll();
-
     }
 
     @Test
@@ -64,6 +64,18 @@ public class EmailControllerIntegrationTest {
                         .content(mapper.writeValueAsString(emailContent))
                 )
                 .andExpect(status().isCreated());
+        verify(mockMailerClient).sendEmail(MockitoHamcrest.argThat(
+                allOf(
+                        hasProperty("productId", equalTo(emailContent.getProductId())),
+                        hasProperty("subject", equalTo(emailContent.getSubject())),
+                        hasProperty("body", equalTo(emailContent.getBody())),
+                        hasProperty("name", equalTo(emailContent.getName())),
+                        hasProperty("company", equalTo(emailContent.getCompany())),
+                        hasProperty("phoneNumber", equalTo(emailContent.getPhoneNumber())),
+                        hasProperty("description", equalTo(emailContent.getDescription())),
+                        hasProperty("quantity", equalTo(emailContent.getQuantity()))
+                )
+        ));
     }
 
     @Test
@@ -71,10 +83,6 @@ public class EmailControllerIntegrationTest {
         // Given
         EmailContent emailContent = createEmailContent();
         ObjectMapper mapper = new ObjectMapper();
-        Product product = new Product();
-        product.setName("test");
-        productRepository.save(product);
-
 
         // When
         this.mockMvc
