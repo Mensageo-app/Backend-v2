@@ -15,7 +15,6 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @SpringBootApplication
 @EnableJpaRepositories("com.mensageo.app.repository")
 @EntityScan("com.mensageo.app.model")
-@EnableSwagger2
 public class AppApplication {
 
 	public static void main(String[] args) {
