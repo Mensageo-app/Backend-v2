@@ -25,7 +25,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-@TestPropertySource(locations = "classpath:application-integrationtest.properties")
 @AutoConfigureMockMvc
 public class HospitalNeedsIntegrationTest {
     static String API_ROOT = "/api/hospital_needs";

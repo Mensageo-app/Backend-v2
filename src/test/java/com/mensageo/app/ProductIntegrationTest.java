@@ -1,13 +1,11 @@
 package com.mensageo.app;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mensageo.app.model.Hospital;
 import com.mensageo.app.model.Product;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
@@ -22,7 +20,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-@TestPropertySource(locations = "classpath:application-integrationtest.properties")
 @AutoConfigureMockMvc
 public class ProductIntegrationTest {
     static String API_ROOT = "/api/products";
