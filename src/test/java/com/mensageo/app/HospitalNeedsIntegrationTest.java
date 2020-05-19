@@ -3,8 +3,10 @@ package com.mensageo.app;
 import com.google.api.services.gmail.Gmail;
 import com.mensageo.app.model.Hospital;
 import com.mensageo.app.model.HospitalNeeds;
+import com.mensageo.app.model.Product;
 import com.mensageo.app.repository.HospitalNeedsRepository;
 import com.mensageo.app.repository.HospitalRepository;
+import com.mensageo.app.repository.ProductRepository;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -14,6 +16,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -28,11 +31,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @AutoConfigureMockMvc
+@Sql("/create_products_and_hospital.sql")
 public class HospitalNeedsIntegrationTest {
     static String API_ROOT = "/api/hospital_needs";
 
-    private static long hospitalId;
-    private static boolean alreadyDbInitialized = false;
+    private Hospital hospital;
+    private Product product1, product2;
 
     @MockBean
     private Gmail gmailServiceMock;
@@ -48,35 +52,24 @@ public class HospitalNeedsIntegrationTest {
     @Autowired
     private HospitalRepository hospitalRepository;
 
+    @Autowired
+    private ProductRepository productRepository;
+
 
     @Before
     public void initTest(){
         this.mvc = MockMvcBuilders.webAppContextSetup(wac).build();
-        if (!alreadyDbInitialized) {
-            Hospital hospital = createHospital();
-            createHospitalNeed(hospital.getId(),3);
-            createHospitalNeed(hospital.getId(),5);
-            hospitalId = hospital.getId();
-            alreadyDbInitialized = true;
-        }
-
+        this.hospital = hospitalRepository.findById(1L).get();
+        this.product1 = productRepository.findById(1L).get();
+        this.product2 = productRepository.findById(2L).get();
     }
 
-    private void createHospitalNeed(long hospitalId, long productID) {
+    private void createHospitalNeed(Product product) {
         HospitalNeeds hospitalNeeds = new HospitalNeeds();
-        hospitalNeeds.setHospitalId(hospitalId);
-        hospitalNeeds.setProductId(productID);
+        hospitalNeeds.setHospital(hospital);
+        hospitalNeeds.setProduct(product);
         hospitalNeeds.setQuantity(12);
         hospitalNeedsRepository.save(hospitalNeeds);
-    }
-
-    private Hospital createHospital() {
-        Hospital hospital = new Hospital();
-        hospital.setName("Test Hospital");
-        hospital.setAddress("Calle 123");
-        hospital.setEmail("hospital@gmail.com");
-        hospitalRepository.save(hospital);
-        return hospital;
     }
 
     @Test
@@ -92,25 +85,25 @@ public class HospitalNeedsIntegrationTest {
 
     @Test
     public void shouldReturn200WhenRequestHospitalsNeeds() throws Exception{
-        String url = API_ROOT.concat("/").concat(String.valueOf(hospitalId));
+        String url = API_ROOT.concat("/").concat(String.valueOf(hospital.getId()));
 
         this.mvc
                 .perform(MockMvcRequestBuilders.get(url).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(2)))
-                .andExpect(jsonPath("$[0].hospitalId", is((int)hospitalId)));
+                .andExpect(jsonPath("$[0].hospital.id", is((int)hospital.getId())));
 
 
     }
 
     @Test
     public void shouldReturn200WhenRequestHospitalsNeedsByProduct() throws Exception{
-        String url = API_ROOT.concat("/by_product/").concat(String.valueOf(3));
+        String url = API_ROOT.concat("/by_product/").concat(String.valueOf(product1.getId()));
 
         this.mvc
                 .perform(MockMvcRequestBuilders.get(url).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(1)))
-                .andExpect(jsonPath("$[0].productId", is(3)));
+                .andExpect(jsonPath("$[0].product.id", is(product1.getId())));
     }
 }

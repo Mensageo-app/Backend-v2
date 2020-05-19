@@ -11,35 +11,22 @@ public class HospitalNeeds {
     private long id;
 
     @Column(nullable = false)
-    private long productId;
-
-    @Column(nullable = false)
     private long quantity;
 
     @Column(nullable = false, insertable = false, updatable = true)
     @Temporal(TemporalType.TIMESTAMP)
     private Date requestTimestamp;
 
-    private long hospitalId;
 
-    public long getHospitalId() {
-        return hospitalId;
-    }
+    @ManyToOne
+    private Product product;
 
-    public void setHospitalId(long hospitalId) {
-        this.hospitalId = hospitalId;
-    }
+    @ManyToOne
+    private Hospital hospital;
+
 
     public long getId() {
         return id;
-    }
-
-    public long getProductId() {
-        return productId;
-    }
-
-    public void setProductId(long productId) {
-        this.productId = productId;
     }
 
     public long getQuantity() {
@@ -59,5 +46,19 @@ public class HospitalNeeds {
     }
 
 
+    public Product getProduct() {
+        return product;
+    }
 
+    public void setProduct(Product product) {
+        this.product = product;
+    }
+
+    public Hospital getHospital() {
+        return hospital;
+    }
+
+    public void setHospital(Hospital hospital) {
+        this.hospital = hospital;
+    }
 }
