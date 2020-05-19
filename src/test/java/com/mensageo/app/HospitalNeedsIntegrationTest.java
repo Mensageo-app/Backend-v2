@@ -15,7 +15,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
@@ -62,6 +61,8 @@ public class HospitalNeedsIntegrationTest {
         this.hospital = hospitalRepository.findById(1L).get();
         this.product1 = productRepository.findById(1L).get();
         this.product2 = productRepository.findById(2L).get();
+        createHospitalNeed(product1);
+        createHospitalNeed(product2);
     }
 
     private void createHospitalNeed(Product product) {
@@ -92,8 +93,6 @@ public class HospitalNeedsIntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(2)))
                 .andExpect(jsonPath("$[0].hospital.id", is((int)hospital.getId())));
-
-
     }
 
     @Test
@@ -104,6 +103,6 @@ public class HospitalNeedsIntegrationTest {
                 .perform(MockMvcRequestBuilders.get(url).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(1)))
-                .andExpect(jsonPath("$[0].product.id", is(product1.getId())));
+                .andExpect(jsonPath("$[0].product.id", is((int)(product1.getId()))));
     }
 }
