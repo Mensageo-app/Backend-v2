@@ -70,7 +70,7 @@ public class EmailControllerIntegrationTest {
                 .andExpect(status().isCreated());
         verify(mockMailerClient).sendEmail(MockitoHamcrest.argThat(
                 allOf(
-                        hasProperty("productId", equalTo(emailContent.getProductId())),
+                        hasProperty("hospitalNeedId", equalTo(emailContent.getHospitalNeedId())),
                         hasProperty("subject", equalTo(emailContent.getSubject())),
                         hasProperty("body", equalTo(emailContent.getBody())),
                         hasProperty("name", equalTo(emailContent.getName())),
@@ -109,7 +109,7 @@ public class EmailControllerIntegrationTest {
         EmailContent emailContent = new EmailContent();
         emailContent.setBody("Email body");
         emailContent.setSubject("Email subject");
-        emailContent.setProductId(1L);
+        emailContent.setHospitalNeedId(1L);
         emailContent.setName("Name description");
         emailContent.setCompany("Company description");
         emailContent.setPhoneNumber("+5555-5555");

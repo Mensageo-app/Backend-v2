@@ -1,7 +1,5 @@
 package com.mensageo.app.services;
 
-import java.time.LocalDateTime;
-
 public class EmailContent {
     private String subject;
     private String body;
@@ -10,7 +8,7 @@ public class EmailContent {
     private String company;
     private String description;
     private long quantity;
-    private long productId;
+    private long hospitalNeedId;
 
     public String getSubject() {
         return subject;
@@ -68,11 +66,11 @@ public class EmailContent {
         this.quantity = quantity;
     }
 
-    public long getProductId() {
-        return productId;
+    public long getHospitalNeedId() {
+        return hospitalNeedId;
     }
 
-    public void setProductId(long productId) {
-        this.productId = productId;
+    public void setHospitalNeedId(long hospitalNeedId) {
+        this.hospitalNeedId = hospitalNeedId;
     }
 }

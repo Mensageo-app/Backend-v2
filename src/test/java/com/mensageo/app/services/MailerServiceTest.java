@@ -1,6 +1,8 @@
 package com.mensageo.app.services;
 
+import com.mensageo.app.model.HospitalNeeds;
 import com.mensageo.app.repository.EmailRepository;
+import com.mensageo.app.repository.HospitalNeedsRepository;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -11,7 +13,7 @@ import org.slf4j.Logger;
 
 import javax.mail.MessagingException;
 import java.io.IOException;
-import java.security.GeneralSecurityException;
+import java.util.Optional;
 
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.equalTo;
@@ -29,17 +31,24 @@ public class MailerServiceTest {
     EmailRepository emailRepository;
 
     @Mock
+    HospitalNeedsRepository hospitalNeedsRepository;
+
+    @Mock
     Logger log;
 
     MailerService mailerService;
 
+    @Mock
+    HospitalNeeds hospitalNeedsMock;
+
     @Before
     public void setUp() {
-        mailerService = new MailerService(gmailClient, emailRepository, log);
+        when(hospitalNeedsRepository.findById(anyLong())).thenReturn(Optional.of(hospitalNeedsMock));
+        mailerService = new MailerService(gmailClient, emailRepository, hospitalNeedsRepository, log);
     }
 
     @Test
-    public void shouldSendAnEmailAndSaveItOnDatabaseWhenEmailContentIsValid() throws IOException, MessagingException, GeneralSecurityException {
+    public void shouldSendAnEmailAndSaveItOnDatabaseWhenEmailContentIsValid() throws IOException, MessagingException {
         // Given
         EmailContent emailContent = new EmailContent();
 
@@ -57,7 +66,7 @@ public class MailerServiceTest {
         EmailContent emailContent = new EmailContent();
         emailContent.setBody("Email body");
         emailContent.setSubject("Email subject");
-        emailContent.setProductId(5L);
+        emailContent.setHospitalNeedId(5L);
         emailContent.setName("Name description");
         emailContent.setCompany("Company description");
         emailContent.setPhoneNumber("+5555-5555");
@@ -70,7 +79,7 @@ public class MailerServiceTest {
         // Then
         verify(emailRepository).save(MockitoHamcrest.argThat(
                 allOf(
-                        hasProperty("productId", equalTo(5L)),
+                        hasProperty("hospitalNeeds", equalTo(hospitalNeedsMock)),
                         hasProperty("subject", equalTo("Email subject")),
                         hasProperty("body", equalTo("Email body")),
                         hasProperty("name", equalTo("Name description")),
@@ -98,7 +107,7 @@ public class MailerServiceTest {
 
 
     @Test
-    public void shouldLogErrorIfSendingEmailFails() throws IOException, MessagingException, GeneralSecurityException {
+    public void shouldLogErrorIfSendingEmailFails() throws IOException, MessagingException {
         // Given
         EmailContent emailContent = new EmailContent();
 

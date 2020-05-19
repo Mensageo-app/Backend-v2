@@ -1,18 +1,17 @@
 package com.mensageo.app.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 public class Email {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    private long productId;
-    private long quantity;
 
+    @ManyToOne
+    private HospitalNeeds hospitalNeeds;
+
+    private long quantity;
     private String subject;
     private String body;
     private String name;
@@ -24,13 +23,6 @@ public class Email {
         return id;
     }
 
-    public long getProductId() {
-        return productId;
-    }
-
-    public void setProductId(long productId) {
-        this.productId = productId;
-    }
 
     public long getQuantity() {
         return quantity;
@@ -86,5 +78,13 @@ public class Email {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public HospitalNeeds getHospitalNeeds() {
+        return hospitalNeeds;
+    }
+
+    public void setHospitalNeeds(HospitalNeeds hospitalNeeds) {
+        this.hospitalNeeds = hospitalNeeds;
     }
 }

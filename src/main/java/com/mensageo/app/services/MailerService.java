@@ -2,6 +2,7 @@ package com.mensageo.app.services;
 
 import com.mensageo.app.model.Email;
 import com.mensageo.app.repository.EmailRepository;
+import com.mensageo.app.repository.HospitalNeedsRepository;
 import org.slf4j.Logger;
 import org.springframework.stereotype.Component;
 
@@ -9,19 +10,21 @@ import org.springframework.stereotype.Component;
 public class MailerService {
     private MailerClient mailerClient;
     private EmailRepository emailRepository;
+    private HospitalNeedsRepository hospitalNeedsRepository;
     private Logger log;
 
-    public MailerService(MailerClient mailerClient, EmailRepository emailRepository, Logger log) {
+    public MailerService(MailerClient mailerClient, EmailRepository emailRepository, HospitalNeedsRepository hospitalNeedsRepository, Logger log) {
 
         this.mailerClient = mailerClient;
         this.emailRepository = emailRepository;
+        this.hospitalNeedsRepository = hospitalNeedsRepository;
         this.log = log;
     }
 
     public void sendEmail(EmailContent emailContent) {
         try {
             Email email = new Email();
-            email.setProductId(emailContent.getProductId());
+            email.setHospitalNeeds(hospitalNeedsRepository.findById(emailContent.getHospitalNeedId()).get());
             email.setSubject(emailContent.getSubject());
             email.setBody(emailContent.getBody());
             email.setName(emailContent.getName());
