@@ -1,5 +1,6 @@
 package com.mensageo.app;
 
+import com.google.api.services.gmail.Gmail;
 import com.mensageo.app.model.Hospital;
 import com.mensageo.app.model.HospitalNeeds;
 import com.mensageo.app.repository.HospitalNeedsRepository;
@@ -10,6 +11,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -31,6 +33,9 @@ public class HospitalNeedsIntegrationTest {
 
     private static long hospitalId;
     private static boolean alreadyDbInitialized = false;
+
+    @MockBean
+    private Gmail gmailServiceMock;
 
     @Autowired
     private WebApplicationContext wac;

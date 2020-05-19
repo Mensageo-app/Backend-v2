@@ -1,6 +1,7 @@
 package com.mensageo.app.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.api.services.gmail.Gmail;
 import com.mensageo.app.model.Email;
 import com.mensageo.app.repository.EmailRepository;
 import com.mensageo.app.services.EmailContent;
@@ -39,6 +40,9 @@ public class EmailControllerIntegrationTest {
     private WebApplicationContext webApplicationContext;
 
     private MockMvc mockMvc;
+
+    @MockBean
+    private Gmail gmailServiceMock;
 
     @Autowired
     private EmailRepository emailRepository;
