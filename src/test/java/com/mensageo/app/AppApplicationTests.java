@@ -1,6 +1,6 @@
 package com.mensageo.app;
 
-import com.google.api.services.gmail.Gmail;
+import com.sendgrid.SendGrid;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -12,7 +12,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 public class AppApplicationTests {
 
 	@MockBean
-	private Gmail gmailServiceMock;
+	private SendGrid sendGridServiceMock;
 
 	@Test
 	public void contextLoads() {

@@ -5,7 +5,6 @@ import com.mensageo.app.repository.EmailRepository;
 import com.mensageo.app.repository.HospitalNeedsRepository;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.internal.runners.statements.ExpectException;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.hamcrest.MockitoHamcrest;
@@ -27,7 +26,7 @@ import static org.mockito.Mockito.*;
 public class MailerServiceTest {
 
     @Mock
-    GmailClient gmailClient;
+    SendGridClient sendGridClientMock;
 
     @Mock
     EmailRepository emailRepository;
@@ -46,7 +45,7 @@ public class MailerServiceTest {
     @Before
     public void setUp() {
         when(hospitalNeedsRepository.findById(anyLong())).thenReturn(Optional.of(hospitalNeedsMock));
-        mailerService = new MailerService(gmailClient, emailRepository, hospitalNeedsRepository, log);
+        mailerService = new MailerService(sendGridClientMock, emailRepository, hospitalNeedsRepository, log);
     }
 
     @Test
@@ -58,7 +57,7 @@ public class MailerServiceTest {
         mailerService.sendEmail(emailContent);
 
         // Then
-        verify(gmailClient).sendEmail(emailContent);
+        verify(sendGridClientMock).sendEmail(emailContent);
         verify(emailRepository).save(any());
     }
 
@@ -114,7 +113,7 @@ public class MailerServiceTest {
         EmailContent emailContent = new EmailContent();
 
         doThrow(RuntimeException.class)
-                .when(gmailClient)
+                .when(sendGridClientMock)
                 .sendEmail(any(EmailContent.class));
 
         // When

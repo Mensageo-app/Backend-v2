@@ -1,12 +1,12 @@
 package com.mensageo.app;
 
-import com.google.api.services.gmail.Gmail;
 import com.mensageo.app.model.Hospital;
 import com.mensageo.app.model.HospitalNeeds;
 import com.mensageo.app.model.Product;
 import com.mensageo.app.repository.HospitalNeedsRepository;
 import com.mensageo.app.repository.HospitalRepository;
 import com.mensageo.app.repository.ProductRepository;
+import com.sendgrid.SendGrid;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -38,7 +38,7 @@ public class HospitalNeedsIntegrationTest {
     private Product product1, product2;
 
     @MockBean
-    private Gmail gmailServiceMock;
+    private SendGrid sendGridServiceMock;
 
     @Autowired
     private WebApplicationContext wac;
