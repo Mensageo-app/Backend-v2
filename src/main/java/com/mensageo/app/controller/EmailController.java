@@ -14,11 +14,6 @@ public class EmailController {
     @Autowired
     private MailerService mailerService;
 
-//    @ExceptionHandler({ Exception.class})
-//    public int handleException() {
-//        return HttpServletResponse.SC_INTERNAL_SERVER_ERROR;
-//    }
-
     @PostMapping("create")
     @ResponseStatus(HttpStatus.CREATED)
     public void create(@RequestBody EmailContent emailContent) {

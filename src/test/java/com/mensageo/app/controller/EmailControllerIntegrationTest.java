@@ -19,10 +19,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
@@ -122,18 +119,13 @@ public class EmailControllerIntegrationTest {
         doThrow(new RuntimeException()).when(mockMailerClient).sendEmail(any(EmailContent.class));
 
         // When
-        MvcResult response = this.mockMvc
+        this.mockMvc
                 .perform(MockMvcRequestBuilders.post(API_ROOT.concat("/create"))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(mapper.writeValueAsString(emailContent)))
-                .andDo(MockMvcResultHandlers.print())
+        // Then
                 .andExpect(status().is5xxServerError())
-                .andReturn();
-                //.andExpect(jsonPath("$.message", Matchers.is("The email couldn't be sent")));
-
-        String content=response.getResponse().getContentAsString();
-        System.out.println("Content: "+content);
-
+                .andExpect(jsonPath("$.errorMessage", Matchers.is("The email couldn't be sent")));
     }
 
     private EmailContent createEmailContent() {
