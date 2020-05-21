@@ -6,6 +6,10 @@ import com.mensageo.app.repository.HospitalNeedsRepository;
 import org.slf4j.Logger;
 import org.springframework.stereotype.Component;
 
+import javax.mail.MessagingException;
+import java.io.IOException;
+import java.security.GeneralSecurityException;
+
 @Component
 public class MailerService {
     private MailerClient mailerClient;
@@ -21,7 +25,7 @@ public class MailerService {
         this.log = log;
     }
 
-    public void sendEmail(EmailContent emailContent) {
+    public void sendEmail(EmailContent emailContent) throws GeneralSecurityException, MessagingException, IOException {
         try {
             Email email = new Email();
             email.setHospitalNeeds(hospitalNeedsRepository.findById(emailContent.getHospitalNeedId()).get());
@@ -34,8 +38,10 @@ public class MailerService {
             email.setQuantity(emailContent.getQuantity());
             emailRepository.save(email);
             mailerClient.sendEmail(emailContent);
+
         } catch (Exception ex) {
             log.error("Error when saving email on database.", ex);
+            throw ex;
         }
     }
 }

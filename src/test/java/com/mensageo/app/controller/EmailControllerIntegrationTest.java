@@ -6,6 +6,7 @@ import com.mensageo.app.model.Email;
 import com.mensageo.app.repository.EmailRepository;
 import com.mensageo.app.services.EmailContent;
 import com.mensageo.app.services.MailerClient;
+import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,7 +19,10 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
@@ -26,7 +30,10 @@ import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.beans.HasPropertyWithValue.hasProperty;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
@@ -102,6 +109,30 @@ public class EmailControllerIntegrationTest {
         assertEquals("Email body", email.getBody());
         assertEquals("Email subject", email.getSubject());
         assertEquals(100L, email.getQuantity());
+
+    }
+
+    @Test
+    public void shouldReturnAnError500() throws Exception {
+
+        // Given
+        EmailContent emailContent = createEmailContent();
+        ObjectMapper mapper = new ObjectMapper();
+
+        doThrow(new RuntimeException()).when(mockMailerClient).sendEmail(any(EmailContent.class));
+
+        // When
+        MvcResult response = this.mockMvc
+                .perform(MockMvcRequestBuilders.post(API_ROOT.concat("/create"))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(mapper.writeValueAsString(emailContent)))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(status().is5xxServerError())
+                .andReturn();
+                //.andExpect(jsonPath("$.message", Matchers.is("The email couldn't be sent")));
+
+        String content=response.getResponse().getContentAsString();
+        System.out.println("Content: "+content);
 
     }
 

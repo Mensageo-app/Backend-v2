@@ -5,6 +5,7 @@ import com.mensageo.app.repository.EmailRepository;
 import com.mensageo.app.repository.HospitalNeedsRepository;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.internal.runners.statements.ExpectException;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.hamcrest.MockitoHamcrest;
@@ -13,6 +14,7 @@ import org.slf4j.Logger;
 
 import javax.mail.MessagingException;
 import java.io.IOException;
+import java.security.GeneralSecurityException;
 import java.util.Optional;
 
 import static org.hamcrest.Matchers.allOf;
@@ -48,7 +50,7 @@ public class MailerServiceTest {
     }
 
     @Test
-    public void shouldSendAnEmailAndSaveItOnDatabaseWhenEmailContentIsValid() throws IOException, MessagingException {
+    public void shouldSendAnEmailAndSaveItOnDatabaseWhenEmailContentIsValid() throws IOException, MessagingException, GeneralSecurityException {
         // Given
         EmailContent emailContent = new EmailContent();
 
@@ -61,7 +63,7 @@ public class MailerServiceTest {
     }
 
     @Test
-    public void shouldSaveEmailWithAllProperties() {
+    public void shouldSaveEmailWithAllProperties() throws GeneralSecurityException, IOException, MessagingException {
         // Given
         EmailContent emailContent = new EmailContent();
         emailContent.setBody("Email body");
@@ -91,8 +93,8 @@ public class MailerServiceTest {
         ));
     }
 
-    @Test
-    public void shouldLogErrorIfSavingOnDatabaseFails(){
+    @Test(expected=RuntimeException.class)
+    public void shouldLogErrorIfSavingOnDatabaseFails() throws GeneralSecurityException, IOException, MessagingException {
         // Given
         EmailContent emailContent = new EmailContent();
 
@@ -106,8 +108,8 @@ public class MailerServiceTest {
     }
 
 
-    @Test
-    public void shouldLogErrorIfSendingEmailFails() throws IOException, MessagingException {
+    @Test(expected=RuntimeException.class)
+    public void shouldLogErrorIfSendingEmailFails() throws IOException, MessagingException, GeneralSecurityException {
         // Given
         EmailContent emailContent = new EmailContent();
 
