@@ -33,3 +33,24 @@ For the H2 DB for the tests we don't have the flyway enabled -  we use the JPA t
 ## Swagger 2
 
 Swagger is enabled and available in the url http://localhost:8081/swagger-ui.html
+
+## Heroku
+
+Heroku only needs two files to work with this project:
+
+- `Procfile`: Defines how the app is going to be executed (similar to the scripts of package.json on NodeJS applications).
+- `application-heroku.properties`: Defines a springboot configuration to use the environment variables of Heroku.
+
+It uses the `pom.xml` file to know more details about the project. For example, it detects that we use a PostgreSQL database and setups one for us automatically.
+
+### How to deploy (without Continuous Integration)
+1. [Install The Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli). 
+2. Push to the `heroku` remote: 
+```
+git push heroku master
+```
+If you are working on a branch, use this instead:
+```
+git push heroku <your_branch_name>:master
+```
+Heroku will do the build automatically and will start the app. Use `heroku open` to open the api on the browser.
