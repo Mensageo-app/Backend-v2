@@ -2,8 +2,15 @@ version: 2.1
 
 orbs:
   maven: circleci/maven@0.0.12
+  heroku: circleci/heroku@0.0.10. # Invoke the Heroku orb
 
 workflows:
   maven_test:
     jobs:
       - maven/test # checkout, build, test, and upload test results
+      - heroku/deploy-via-git: # Use the pre-configured job, deploy-via-git
+          requires:
+            - maven/test
+          filters:
+            branches:
+              only: master
