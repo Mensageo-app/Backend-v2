@@ -38,10 +38,12 @@ Swagger is enabled and available in the url http://localhost:8081/swagger-ui.htm
 
 Heroku only needs two files to work with this project:
 
-- `Procfile`: Defines how the app is going to be executed (similar to the scripts of package.json on NodeJS applications).
-- `application-heroku.properties`: Defines a springboot configuration to use the environment variables of Heroku.
+- `Procfile`: Defines how the app is going to be executed (similar to the scripts of `package.json` on NodeJS applications).
+- `application-staging.properties`: Defines a springboot configuration to use the environment variables of Heroku.
 
-It uses the `pom.xml` file to know more details about the project. For example, it detects that we use a PostgreSQL database and setups one for us automatically.
+It uses the `pom.xml` file to know more details about the project. For example, it detects that we use a `PostgreSQL` database and sets up one for us automatically.
+
+Currently, every push to `master` on this repository will automatically deploy the built artifact to `heroku`, if pipeline is green
 
 ### How to deploy (without Continuous Integration)
 1. [Install The Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli). 
