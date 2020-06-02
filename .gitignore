@@ -32,3 +32,6 @@ build/
 
 ### Gmail API ###
 tokens
+
+# sensitive data files
+data
