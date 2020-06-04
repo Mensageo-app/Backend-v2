@@ -1,5 +1,6 @@
 package com.mensageo.app.controller;
 
+import com.mensageo.app.controller.dto.EmailRequest;
 import com.mensageo.app.services.EmailContent;
 import com.mensageo.app.services.MailerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,9 +17,10 @@ public class EmailController {
 
     @PostMapping("create")
     @ResponseStatus(HttpStatus.CREATED)
-    public void create(@RequestBody EmailContent emailContent) {
+    public void create(@RequestBody EmailRequest emailRequest) {
 
         try {
+            EmailContent emailContent = new EmailContent(emailRequest);
             mailerService.sendEmail(emailContent);
 
         } catch (Exception exc) {

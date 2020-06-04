@@ -1,6 +1,7 @@
 package com.mensageo.app.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mensageo.app.controller.dto.EmailRequest;
 import com.mensageo.app.model.Email;
 import com.mensageo.app.repository.EmailRepository;
 import com.mensageo.app.services.EmailContent;
@@ -62,14 +63,15 @@ public class EmailControllerIntegrationTest {
     @Test
     public void shouldReturn201WhenRequestCreateEmail() throws Exception {
         // Given
-        EmailContent emailContent = createEmailContent();
+        EmailRequest emailRequest = createEmailRequest();
+        EmailContent emailContent = new EmailContent(emailRequest);
         ObjectMapper mapper = new ObjectMapper();
 
         // Then
         this.mockMvc
                 .perform(MockMvcRequestBuilders.post(API_ROOT.concat("/create"))
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(mapper.writeValueAsString(emailContent))
+                        .content(mapper.writeValueAsString(emailRequest))
                 )
                 .andExpect(status().isCreated());
         verify(mockMailerClient).sendEmail(MockitoHamcrest.argThat(
@@ -89,25 +91,28 @@ public class EmailControllerIntegrationTest {
     @Test
     public void shouldSaveOneRecordInTheEmailTable() throws Exception {
         // Given
-        EmailContent emailContent = createEmailContent();
+        EmailRequest emailRequest = createEmailRequest();
+        EmailContent emailContent = new EmailContent(emailRequest);
         ObjectMapper mapper = new ObjectMapper();
 
         // When
         this.mockMvc
                 .perform(MockMvcRequestBuilders.post(API_ROOT.concat("/create"))
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(mapper.writeValueAsString(emailContent))
+                        .content(mapper.writeValueAsString(emailRequest))
                 );
 
         // Then
         assertEquals(1, emailRepository.count());
         Email email = emailRepository.findAll().iterator().next();
-        assertEquals("Name description", email.getName());
-        assertEquals("Email body", email.getBody());
-        assertEquals("Email subject", email.getSubject());
-        assertEquals(100L, email.getQuantity());
+        assertEquals(emailContent.getName(), email.getName());
+        assertEquals(emailContent.getBody(), email.getBody());
+        assertEquals(emailContent.getSubject(), email.getSubject());
+        assertEquals(emailContent.getQuantity(), email.getQuantity());
 
     }
+
+
 
     @Test
     public void shouldReturnAnError500() throws Exception {
@@ -126,6 +131,17 @@ public class EmailControllerIntegrationTest {
         // Then
                 .andExpect(status().is5xxServerError())
                 .andExpect(jsonPath("$.errorMessage", Matchers.is("The email couldn't be sent")));
+    }
+
+    private EmailRequest createEmailRequest() {
+        EmailRequest emailRequest = new EmailRequest();
+        emailRequest.setHospitalNeedId(1L);
+        emailRequest.setName("Name description");
+        emailRequest.setCompany("Company description");
+        emailRequest.setPhoneNumber("+5555-5555");
+        emailRequest.setDonationInfo("Offer description");
+        emailRequest.setQuantity(100L);
+        return emailRequest;
     }
 
     private EmailContent createEmailContent() {
