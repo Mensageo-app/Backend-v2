@@ -2,13 +2,19 @@ package com.mensageo.app.services;
 
 import com.mensageo.app.controller.dto.EmailRequest;
 
+
 public class EmailContent {
+
     private String name;
     private String phoneNumber;
     private String company;
     private String description;
     private long quantity;
     private long hospitalNeedId;
+    private String productName;
+    private String hospitalName;
+    private String email;
+
 
     public EmailContent() {}
 
@@ -22,11 +28,24 @@ public class EmailContent {
     }
 
     public String createSubject() {
-        return "";
+        return String.format("Someone has answered your request for product %s", this.productName);
     }
 
     public String createBody() {
-        return "";
+        return String.format("Hi %s,\n\n" +
+                "We have good news! %s has answered your request for product %s, to provide %d of it. Here is their information, please contact them.\n\n" +
+                "Maker and product information:\n\n" +
+                "Full Name: %s\n"+
+                "Phone: %s\n"+
+                "Email: %s\n"+
+                "Product Amount: %d\n"+
+                "Description: %s\n"+
+                "Once you have contacted the Maker and you have agreed a delivery date please inform us about it by replying to this email. In addition, we will be really" +
+                " grateful if once your order has been fulfilled you contact us again. In this way we guarantee that Mensageo.com will always have accurate and updated" +
+                " information and we can help more people.\n\n" +
+                "Thank you for using Mensageo!! Please spread the word about it!\n\n"+
+                "Regards,\n" +
+                "Mensageo Team", this.hospitalName, this.name,this.productName,this.quantity,this.name,this.phoneNumber,this.email,this.quantity, this.description);
     }
 
 
@@ -76,5 +95,28 @@ public class EmailContent {
 
     public void setHospitalNeedId(long hospitalNeedId) {
         this.hospitalNeedId = hospitalNeedId;
+    }
+
+    public String getProductName() {
+        return productName;
+    }
+
+    public void setProductName(String productName) {
+        this.productName = productName;
+    }
+    public String getHospitalName() {
+        return hospitalName;
+    }
+
+    public void setHospitalName(String hospitalName) {
+        this.hospitalName = hospitalName;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }
