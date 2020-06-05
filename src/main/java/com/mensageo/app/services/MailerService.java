@@ -29,8 +29,6 @@ public class MailerService {
         try {
             Email email = new Email();
             email.setHospitalNeeds(hospitalNeedsRepository.findById(emailContent.getHospitalNeedId()).get());
-            email.setSubject(emailContent.getSubject());
-            email.setBody(emailContent.getBody());
             email.setName(emailContent.getName());
             email.setCompany(emailContent.getCompany());
             email.setPhoneNumber(emailContent.getPhoneNumber());

@@ -1,11 +1,8 @@
 package com.mensageo.app.services;
 
 import com.mensageo.app.controller.dto.EmailRequest;
-import com.mensageo.app.model.Email;
 
 public class EmailContent {
-    private String subject;
-    private String body;
     private String name;
     private String phoneNumber;
     private String company;
@@ -16,8 +13,6 @@ public class EmailContent {
     public EmailContent() {}
 
     public EmailContent(EmailRequest emailRequest) {
-        setSubject("We need to define a subject");
-        setBody("We need to define a body");
         setName(emailRequest.getName());
         setPhoneNumber(emailRequest.getPhoneNumber());
         setCompany(emailRequest.getCompany());
@@ -26,21 +21,14 @@ public class EmailContent {
         setHospitalNeedId(emailRequest.getHospitalNeedId());
     }
 
-    public String getSubject() {
-        return subject;
+    public String createSubject() {
+        return "";
     }
 
-    public void setSubject(String subject) {
-        this.subject = subject;
+    public String createBody() {
+        return "";
     }
 
-    public String getBody() {
-        return body;
-    }
-
-    public void setBody(String body) {
-        this.body = body;
-    }
 
     public String getName() {
         return name;

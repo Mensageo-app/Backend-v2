@@ -77,8 +77,6 @@ public class EmailControllerIntegrationTest {
         verify(mockMailerClient).sendEmail(MockitoHamcrest.argThat(
                 allOf(
                         hasProperty("hospitalNeedId", equalTo(emailContent.getHospitalNeedId())),
-                        hasProperty("subject", equalTo(emailContent.getSubject())),
-                        hasProperty("body", equalTo(emailContent.getBody())),
                         hasProperty("name", equalTo(emailContent.getName())),
                         hasProperty("company", equalTo(emailContent.getCompany())),
                         hasProperty("phoneNumber", equalTo(emailContent.getPhoneNumber())),
@@ -106,8 +104,6 @@ public class EmailControllerIntegrationTest {
         assertEquals(1, emailRepository.count());
         Email email = emailRepository.findAll().iterator().next();
         assertEquals(emailContent.getName(), email.getName());
-        assertEquals(emailContent.getBody(), email.getBody());
-        assertEquals(emailContent.getSubject(), email.getSubject());
         assertEquals(emailContent.getQuantity(), email.getQuantity());
 
     }
@@ -146,8 +142,6 @@ public class EmailControllerIntegrationTest {
 
     private EmailContent createEmailContent() {
         EmailContent emailContent = new EmailContent();
-        emailContent.setBody("Email body");
-        emailContent.setSubject("Email subject");
         emailContent.setHospitalNeedId(1L);
         emailContent.setName("Name description");
         emailContent.setCompany("Company description");

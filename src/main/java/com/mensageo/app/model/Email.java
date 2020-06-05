@@ -12,8 +12,6 @@ public class Email {
     private HospitalNeeds hospitalNeeds;
 
     private long quantity;
-    private String subject;
-    private String body;
     private String name;
     private String company;
     private String phoneNumber;
@@ -30,22 +28,6 @@ public class Email {
 
     public void setQuantity(long quantity) {
         this.quantity = quantity;
-    }
-
-    public String getSubject() {
-        return subject;
-    }
-
-    public void setSubject(String subject) {
-        this.subject = subject;
-    }
-
-    public String getBody() {
-        return body;
-    }
-
-    public void setBody(String body) {
-        this.body = body;
     }
 
     public String getName() {

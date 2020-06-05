@@ -37,17 +37,14 @@ public class SendGridClientTest {
     public void sendEmail() throws IOException {
 
         when(sendGridServiceMock.api(any(Request.class))).thenReturn(mockResponse);
-        String body = "Email body 1";
-        String subject = "Email subject";
+        EmailContent emailContent = new EmailContent();
+        String body = emailContent.createBody();
+        String subject = emailContent.createSubject();
 
         String mockPayload = "{\"from\":{\"email\":\"mensageo.backend@gmail.com\"},\"subject\":\""+
                 subject+"\",\"personalizations\":[{\"to\":[{\"email\":\"mensageo.backend@gmail.com\"}]}]," +
                 "\"content\":[{\"type\":\"text/plain\",\"value\":\""+body+"\"}]}";
 
-        EmailContent emailContent = new EmailContent();
-        emailContent.setCompany("Company name");
-        emailContent.setSubject(subject);
-        emailContent.setBody(body);
 
         sendGridClient.sendEmail(emailContent);
 
@@ -60,5 +57,6 @@ public class SendGridClientTest {
         ));
 
     }
+
 
 }

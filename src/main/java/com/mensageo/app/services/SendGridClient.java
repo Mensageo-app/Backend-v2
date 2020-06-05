@@ -24,9 +24,9 @@ public class SendGridClient implements MailerClient {
     @Override
     public void sendEmail(EmailContent emailContent) throws IOException {
         Email from = new Email("mensageo.backend@gmail.com");
-        String subject = emailContent.getSubject();
+        String subject = emailContent.createSubject();
         Email to = new Email("mensageo.backend@gmail.com");
-        Content content = new Content("text/plain", emailContent.getBody());
+        Content content = new Content("text/plain", emailContent.createBody());
         Mail mail = new Mail(from, subject, to, content);
 
         Request request = new Request();
