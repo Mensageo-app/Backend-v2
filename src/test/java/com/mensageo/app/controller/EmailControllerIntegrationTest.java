@@ -78,13 +78,41 @@ public class EmailControllerIntegrationTest {
                 allOf(
                         hasProperty("hospitalNeedId", equalTo(emailContent.getHospitalNeedId())),
                         hasProperty("name", equalTo(emailContent.getName())),
-                        hasProperty("company", equalTo(emailContent.getCompany())),
                         hasProperty("phoneNumber", equalTo(emailContent.getPhoneNumber())),
                         hasProperty("description", equalTo(emailContent.getDescription())),
                         hasProperty("quantity", equalTo(emailContent.getQuantity()))
                 )
         ));
     }
+
+    @Test
+    public void shouldReturn201WhenRequestCreateEmailWithOptionalFormFields() throws Exception {
+        // Given
+        EmailRequest emailRequest = createEmailRequestWithOptionalFields();
+        EmailContent emailContent = new EmailContent(emailRequest);
+        ObjectMapper mapper = new ObjectMapper();
+
+        // Then
+        this.mockMvc
+                .perform(MockMvcRequestBuilders.post(API_ROOT)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(mapper.writeValueAsString(emailRequest))
+                )
+                .andExpect(status().isCreated());
+        verify(mockMailerClient).sendEmail(MockitoHamcrest.argThat(
+                allOf(
+                        hasProperty("hospitalNeedId", equalTo(emailContent.getHospitalNeedId())),
+                        hasProperty("name", equalTo(emailContent.getName())),
+                        hasProperty("company", equalTo(emailRequest.getCompany())),
+                        hasProperty("phoneNumber", equalTo(emailContent.getPhoneNumber())),
+                        hasProperty("description", equalTo(emailContent.getDescription())),
+                        hasProperty("quantity", equalTo(emailContent.getQuantity())),
+                        hasProperty("additionalEmail", equalTo(emailRequest.getAdditionalEmail())),
+                        hasProperty("additionalPhoneNumber", equalTo(emailRequest.getAdditionalPhoneNumber()))
+                )
+        ));
+    }
+
 
     @Test
     public void shouldSaveOneRecordInTheEmailTable() throws Exception {
@@ -133,7 +161,6 @@ public class EmailControllerIntegrationTest {
         EmailRequest emailRequest = new EmailRequest();
         emailRequest.setHospitalNeedId(1L);
         emailRequest.setName("Name description");
-        emailRequest.setCompany("Company description");
         emailRequest.setPhoneNumber("+5555-5555");
         emailRequest.setDonationInfo("Offer description");
         emailRequest.setQuantity(100L);
@@ -144,10 +171,23 @@ public class EmailControllerIntegrationTest {
         EmailContent emailContent = new EmailContent();
         emailContent.setHospitalNeedId(1L);
         emailContent.setName("Name description");
-        emailContent.setCompany("Company description");
         emailContent.setPhoneNumber("+5555-5555");
         emailContent.setDescription("Offer description");
         emailContent.setQuantity(100L);
         return emailContent;
+    }
+
+    private EmailRequest createEmailRequestWithOptionalFields() {
+        EmailRequest emailRequest = new EmailRequest();
+        emailRequest.setHospitalNeedId(1L);
+        emailRequest.setName("Name description");
+        emailRequest.setCompany("Company description");
+        emailRequest.setPhoneNumber("+5555-5555");
+        emailRequest.setDonationInfo("Offer description");
+        emailRequest.setQuantity(100L);
+        emailRequest.setAdditionalEmail("b@gmail.com");
+        emailRequest.setAdditionalPhoneNumber("11234");
+
+        return emailRequest;
     }
 }

@@ -14,6 +14,8 @@ public class EmailContent {
     private String productName;
     private String hospitalName;
     private String email;
+    private String additionalEmail;
+    private String additionalPhoneNumber;
 
 
     public EmailContent() {}
@@ -25,6 +27,8 @@ public class EmailContent {
         setDescription(emailRequest.getDonationInfo());
         setQuantity(emailRequest.getQuantity());
         setHospitalNeedId(emailRequest.getHospitalNeedId());
+        setAdditionalPhoneNumber(emailRequest.getAdditionalPhoneNumber());
+        setAdditionalEmail(emailRequest.getAdditionalEmail());
     }
 
     public String createSubject() {
@@ -40,6 +44,9 @@ public class EmailContent {
                 "Email: %s\n"+
                 "Product Amount: %d\n"+
                 "Description: %s\n"+
+                ( this.company != null ? "Company: "+this.company+"\n" : "") +
+                ( this.additionalEmail != null ? "Additional Email: "+this.additionalEmail+"\n" : "") +
+                ( this.additionalPhoneNumber != null ? "Additional Phone Number: "+this.additionalPhoneNumber+"\n" : "") +
                 "Once you have contacted the Maker and you have agreed a delivery date please inform us about it by replying to this email. In addition, we will be really" +
                 " grateful if once your order has been fulfilled you contact us again. In this way we guarantee that Mensageo.com will always have accurate and updated" +
                 " information and we can help more people.\n\n" +
@@ -118,5 +125,21 @@ public class EmailContent {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getAdditionalEmail() {
+        return additionalEmail;
+    }
+
+    public void setAdditionalEmail(String additionalEmail) {
+        this.additionalEmail = additionalEmail;
+    }
+
+    public String getAdditionalPhoneNumber() {
+        return additionalPhoneNumber;
+    }
+
+    public void setAdditionalPhoneNumber(String additionalPhoneNumber) {
+        this.additionalPhoneNumber = additionalPhoneNumber;
     }
 }

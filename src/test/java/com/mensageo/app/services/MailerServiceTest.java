@@ -1,6 +1,8 @@
 package com.mensageo.app.services;
 
+import com.mensageo.app.model.Hospital;
 import com.mensageo.app.model.HospitalNeeds;
+import com.mensageo.app.model.Product;
 import com.mensageo.app.repository.EmailRepository;
 import com.mensageo.app.repository.HospitalNeedsRepository;
 import org.junit.Before;
@@ -26,7 +28,7 @@ import static org.mockito.Mockito.*;
 public class MailerServiceTest {
 
     @Mock
-    SendGridClient sendGridClientMock;
+    MailerClient sendGridClientMock;
 
     @Mock
     EmailRepository emailRepository;
@@ -45,6 +47,16 @@ public class MailerServiceTest {
     @Before
     public void setUp() {
         when(hospitalNeedsRepository.findById(anyLong())).thenReturn(Optional.of(hospitalNeedsMock));
+        Hospital hospitalMock = new Hospital();
+        hospitalMock.setName("Hospital");
+        hospitalMock.setEmail("a@a.s");
+        Product productMock = new Product();
+        productMock.setName("Product Name");
+        when(hospitalNeedsMock.getHospital()).thenReturn(hospitalMock);
+        when(hospitalNeedsMock.getProduct()).thenReturn(productMock);
+        lenient().when(hospitalNeedsMock.getId()).thenReturn(5L);
+
+
         mailerService = new MailerService(sendGridClientMock, emailRepository, hospitalNeedsRepository, log);
     }
 
@@ -64,7 +76,7 @@ public class MailerServiceTest {
     @Test
     public void shouldSaveEmailWithAllProperties() throws GeneralSecurityException, IOException, MessagingException {
         // Given
-        EmailContent emailContent = createEmailContent();
+        EmailContent emailContent = createEmailContentWithRequestData();
 
         // When
         mailerService.sendEmail(emailContent);
@@ -74,10 +86,37 @@ public class MailerServiceTest {
                 allOf(
                         hasProperty("hospitalNeeds", equalTo(hospitalNeedsMock)),
                         hasProperty("name", equalTo("Name description")),
-                        hasProperty("company", equalTo("Company description")),
                         hasProperty("phoneNumber", equalTo("+5555-5555")),
                         hasProperty("description", equalTo("Offer description")),
                         hasProperty("quantity", equalTo(100L))
+                )
+        ));
+    }
+
+
+    @Test
+    public void shouldSendEmailWithAllRequiredProperties() throws GeneralSecurityException, IOException, MessagingException {
+        // Given
+        EmailContent emailContent = createEmailContentWithRequestData();
+
+        // When
+        mailerService.sendEmail(emailContent);
+
+        // Then
+        verify(sendGridClientMock).sendEmail(MockitoHamcrest.argThat(
+                allOf(
+                        hasProperty("name", equalTo("Name description")),
+                        hasProperty("phoneNumber", equalTo("+5555-5555")),
+                        hasProperty("description", equalTo("Offer description")),
+                        hasProperty("quantity", equalTo(100L)),
+                        hasProperty("hospitalNeedId", equalTo(5L)),
+                        hasProperty("productName", equalTo("Product Name")),
+                        hasProperty("hospitalName", equalTo("Hospital")),
+                        hasProperty("email", equalTo("a@a.s")),
+                        hasProperty("company", equalTo(null)),
+                        hasProperty("additionalEmail", equalTo(null)),
+                        hasProperty("additionalPhoneNumber", equalTo(null))
+
                 )
         ));
     }
@@ -114,12 +153,11 @@ public class MailerServiceTest {
     }
 
 
-    private EmailContent createEmailContent() {
+    private EmailContent createEmailContentWithRequestData() {
 
         EmailContent emailContent = new EmailContent();
         emailContent.setHospitalNeedId(5L);
         emailContent.setName("Name description");
-        emailContent.setCompany("Company description");
         emailContent.setPhoneNumber("+5555-5555");
         emailContent.setDescription("Offer description");
         emailContent.setQuantity(100L);
