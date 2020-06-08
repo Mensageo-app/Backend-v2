@@ -15,7 +15,7 @@ public class EmailController {
     @Autowired
     private MailerService mailerService;
 
-    @PostMapping("create")
+    @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public void create(@RequestBody EmailRequest emailRequest) {
 

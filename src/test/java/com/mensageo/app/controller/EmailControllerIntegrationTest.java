@@ -69,7 +69,7 @@ public class EmailControllerIntegrationTest {
 
         // Then
         this.mockMvc
-                .perform(MockMvcRequestBuilders.post(API_ROOT.concat("/create"))
+                .perform(MockMvcRequestBuilders.post(API_ROOT)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(mapper.writeValueAsString(emailRequest))
                 )
@@ -95,7 +95,7 @@ public class EmailControllerIntegrationTest {
 
         // When
         this.mockMvc
-                .perform(MockMvcRequestBuilders.post(API_ROOT.concat("/create"))
+                .perform(MockMvcRequestBuilders.post(API_ROOT)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(mapper.writeValueAsString(emailRequest))
                 );
@@ -121,7 +121,7 @@ public class EmailControllerIntegrationTest {
 
         // When
         this.mockMvc
-                .perform(MockMvcRequestBuilders.post(API_ROOT.concat("/create"))
+                .perform(MockMvcRequestBuilders.post(API_ROOT)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(mapper.writeValueAsString(emailContent)))
         // Then
