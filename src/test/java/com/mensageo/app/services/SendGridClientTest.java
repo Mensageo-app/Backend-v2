@@ -6,7 +6,6 @@ import com.sendgrid.Response;
 import com.sendgrid.SendGrid;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.hamcrest.MockitoHamcrest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,8 +32,6 @@ public class SendGridClientTest {
 
     @Autowired
     private SendGridClient sendGridClient;
-
-    private ArgumentCaptor<Request> argument = ArgumentCaptor.forClass(Request.class);
 
     @Test
     public void sendEmail() throws IOException {
