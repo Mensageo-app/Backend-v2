@@ -39,7 +39,7 @@ public class MailerService {
             emailContent.setEmail(email.getHospitalNeeds().getHospital().getEmail());
             emailContent.setProductName(email.getHospitalNeeds().getProduct().getName());
             emailRepository.save(email);
-            mailerClient.sendEmail(emailContent, "");
+            mailerClient.sendEmail(emailContent,email.getHospitalNeeds().getHospital().getEmail());
 
         } catch (Exception ex) {
             log.error("Error when saving email on database.", ex);

@@ -69,7 +69,7 @@ public class MailerServiceTest {
         mailerService.sendEmail(emailContent);
 
         // Then
-        verify(sendGridClientMock).sendEmail(emailContent, "");
+        verify(sendGridClientMock).sendEmail(emailContent, "a@a.s");
         verify(emailRepository).save(any());
     }
 
@@ -95,7 +95,7 @@ public class MailerServiceTest {
 
 
     @Test
-    public void shouldSendEmailWithAllRequiredProperties() throws GeneralSecurityException, IOException, MessagingException {
+    public void shouldSendEmailWithAllRequiredPropertiesToCorrectDestination() throws GeneralSecurityException, IOException, MessagingException {
         // Given
         EmailContent emailContent = createEmailContentWithRequestData();
 
@@ -118,7 +118,7 @@ public class MailerServiceTest {
                         hasProperty("additionalPhoneNumber", equalTo(null))
 
                 )
-        ), anyString());
+        ), eq("a@a.s"));
     }
 
     @Test(expected=RuntimeException.class)
