@@ -22,10 +22,10 @@ public class SendGridClient implements MailerClient {
     }
 
     @Override
-    public void sendEmail(EmailContent emailContent) throws IOException {
+    public void sendEmail(EmailContent emailContent, String destination) throws IOException {
         Email from = new Email("mensageo.backend@gmail.com");
         String subject = emailContent.createSubject();
-        Email to = new Email("mensageo.backend@gmail.com");
+        Email to = new Email(destination);
         Content content = new Content("text/plain", emailContent.createBody());
         Mail mail = new Mail(from, subject, to, content);
 

@@ -5,5 +5,5 @@ import java.io.IOException;
 import java.security.GeneralSecurityException;
 
 public interface MailerClient {
-    void sendEmail(EmailContent emailContent) throws MessagingException, IOException, GeneralSecurityException;
+    void sendEmail(EmailContent emailContent, String destination) throws MessagingException, IOException, GeneralSecurityException;
 }

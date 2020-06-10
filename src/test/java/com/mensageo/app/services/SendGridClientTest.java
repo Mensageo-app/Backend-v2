@@ -34,7 +34,7 @@ public class SendGridClientTest {
     private SendGridClient sendGridClient;
 
     @Test
-    public void sendEmail() throws IOException {
+    public void shouldSendEmail() throws IOException {
 
         when(sendGridServiceMock.api(any(Request.class))).thenReturn(mockResponse);
 
@@ -42,7 +42,7 @@ public class SendGridClientTest {
 
         String mockPayload = "{\"from\":{\"email\":\"mensageo.backend@gmail.com\"}," +
                 "\"subject\":\"Someone has answered your request for product null\"," +
-                "\"personalizations\":[{\"to\":[{\"email\":\"mensageo.backend@gmail.com\"}]}]," +
+                "\"personalizations\":[{\"to\":[{\"email\":\"b@gmail.com\"}]}]," +
                 "\"content\":[{\"type\":\"text/plain\",\"value\":\"Hi null,\\n\\nWe have good news! null has answered your " +
                 "request for product null, to provide 0 of it. Here is their information, please contact them.\\n\\nMaker " +
                 "and product information:\\n\\nFull Name: null\\nPhone: null\\nEmail: null\\nProduct Amount: 0\\n" +
@@ -52,7 +52,7 @@ public class SendGridClientTest {
                 "updated information and we can help more people.\\n\\nThank you for using Mensageo!! Please spread the " +
                 "word about it!\\n\\nRegards,\\nMensageo Team\"}]}";
 
-        sendGridClient.sendEmail(emailContent);
+        sendGridClient.sendEmail(emailContent, "b@gmail.com");
 
         verify(sendGridServiceMock).api(MockitoHamcrest.argThat(
                 allOf(

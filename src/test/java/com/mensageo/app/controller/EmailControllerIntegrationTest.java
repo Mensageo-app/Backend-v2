@@ -29,6 +29,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.beans.HasPropertyWithValue.hasProperty;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -82,7 +83,7 @@ public class EmailControllerIntegrationTest {
                         hasProperty("description", equalTo(emailContent.getDescription())),
                         hasProperty("quantity", equalTo(emailContent.getQuantity()))
                 )
-        ));
+        ), anyString());
     }
 
     @Test
@@ -110,7 +111,7 @@ public class EmailControllerIntegrationTest {
                         hasProperty("additionalEmail", equalTo(emailRequest.getAdditionalEmail())),
                         hasProperty("additionalPhoneNumber", equalTo(emailRequest.getAdditionalPhoneNumber()))
                 )
-        ));
+        ), anyString());
     }
 
 
@@ -145,7 +146,7 @@ public class EmailControllerIntegrationTest {
         EmailContent emailContent = createEmailContent();
         ObjectMapper mapper = new ObjectMapper();
 
-        doThrow(new RuntimeException()).when(mockMailerClient).sendEmail(any(EmailContent.class));
+        doThrow(new RuntimeException()).when(mockMailerClient).sendEmail(any(EmailContent.class), anyString());
 
         // When
         this.mockMvc

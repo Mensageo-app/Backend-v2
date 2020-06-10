@@ -69,7 +69,7 @@ public class MailerServiceTest {
         mailerService.sendEmail(emailContent);
 
         // Then
-        verify(sendGridClientMock).sendEmail(emailContent);
+        verify(sendGridClientMock).sendEmail(emailContent, "");
         verify(emailRepository).save(any());
     }
 
@@ -118,7 +118,7 @@ public class MailerServiceTest {
                         hasProperty("additionalPhoneNumber", equalTo(null))
 
                 )
-        ));
+        ), anyString());
     }
 
     @Test(expected=RuntimeException.class)
@@ -143,7 +143,7 @@ public class MailerServiceTest {
 
         doThrow(RuntimeException.class)
                 .when(sendGridClientMock)
-                .sendEmail(any(EmailContent.class));
+                .sendEmail(any(EmailContent.class), anyString());
 
         // When
         mailerService.sendEmail(emailContent);
