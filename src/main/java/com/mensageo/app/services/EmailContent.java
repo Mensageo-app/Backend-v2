@@ -29,6 +29,7 @@ public class EmailContent {
         setHospitalNeedId(emailRequest.getHospitalNeedId());
         setAdditionalPhoneNumber(emailRequest.getAdditionalPhoneNumber());
         setAdditionalEmail(emailRequest.getAdditionalEmail());
+        setEmail(emailRequest.getEmail());
     }
 
     public String createSubject() {

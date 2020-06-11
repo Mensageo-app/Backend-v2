@@ -36,7 +36,6 @@ public class MailerService {
             email.setQuantity(emailContent.getQuantity());
 
             emailContent.setHospitalName(email.getHospitalNeeds().getHospital().getName());
-            emailContent.setEmail(email.getHospitalNeeds().getHospital().getEmail());
             emailContent.setProductName(email.getHospitalNeeds().getProduct().getName());
             emailRepository.save(email);
             mailerClient.sendEmail(emailContent,email.getHospitalNeeds().getHospital().getEmail());

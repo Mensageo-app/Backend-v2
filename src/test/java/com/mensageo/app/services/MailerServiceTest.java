@@ -112,7 +112,7 @@ public class MailerServiceTest {
                         hasProperty("hospitalNeedId", equalTo(5L)),
                         hasProperty("productName", equalTo("Product Name")),
                         hasProperty("hospitalName", equalTo("Hospital")),
-                        hasProperty("email", equalTo("a@a.s")),
+                        hasProperty("email", equalTo("la@gmail.com")),
                         hasProperty("company", equalTo(null)),
                         hasProperty("additionalEmail", equalTo(null)),
                         hasProperty("additionalPhoneNumber", equalTo(null))
@@ -161,6 +161,7 @@ public class MailerServiceTest {
         emailContent.setPhoneNumber("+5555-5555");
         emailContent.setDescription("Offer description");
         emailContent.setQuantity(100L);
+        emailContent.setEmail("la@gmail.com");
 
         return emailContent;
     }

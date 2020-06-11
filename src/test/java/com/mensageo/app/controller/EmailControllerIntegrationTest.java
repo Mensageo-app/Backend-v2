@@ -81,7 +81,8 @@ public class EmailControllerIntegrationTest {
                         hasProperty("name", equalTo(emailContent.getName())),
                         hasProperty("phoneNumber", equalTo(emailContent.getPhoneNumber())),
                         hasProperty("description", equalTo(emailContent.getDescription())),
-                        hasProperty("quantity", equalTo(emailContent.getQuantity()))
+                        hasProperty("quantity", equalTo(emailContent.getQuantity())),
+                        hasProperty("email", equalTo("ab@gmail.com"))
                 )
         ), anyString());
     }
@@ -109,7 +110,8 @@ public class EmailControllerIntegrationTest {
                         hasProperty("description", equalTo(emailContent.getDescription())),
                         hasProperty("quantity", equalTo(emailContent.getQuantity())),
                         hasProperty("additionalEmail", equalTo(emailRequest.getAdditionalEmail())),
-                        hasProperty("additionalPhoneNumber", equalTo(emailRequest.getAdditionalPhoneNumber()))
+                        hasProperty("additionalPhoneNumber", equalTo(emailRequest.getAdditionalPhoneNumber())),
+                        hasProperty("email", equalTo("ab@gmail.com"))
                 )
         ), anyString());
     }
@@ -165,6 +167,7 @@ public class EmailControllerIntegrationTest {
         emailRequest.setPhoneNumber("+5555-5555");
         emailRequest.setDonationInfo("Offer description");
         emailRequest.setQuantity(100L);
+        emailRequest.setEmail("ab@gmail.com");
         return emailRequest;
     }
 
@@ -188,6 +191,7 @@ public class EmailControllerIntegrationTest {
         emailRequest.setQuantity(100L);
         emailRequest.setAdditionalEmail("b@gmail.com");
         emailRequest.setAdditionalPhoneNumber("11234");
+        emailRequest.setEmail("ab@gmail.com");
 
         return emailRequest;
     }
